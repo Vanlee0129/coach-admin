@@ -1,3 +1,4 @@
+import useAuth from '@/hooks/useAuth';
 import {
   changeUserInfo,
   createUser,
@@ -8,7 +9,6 @@ import {
 import { getUuid } from '@/utils';
 import { UploadOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
-import { useAccess } from '@umijs/max';
 import type { GetProp, UploadFile, UploadProps } from 'antd';
 import {
   Button,
@@ -39,7 +39,7 @@ type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 const Manage: React.FC = () => {
   const [user, setUser] = useState<any[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const access = useAccess();
+  const canUse = useAuth();
   const [form] = Form.useForm();
 
   const [fileList, setFileList] = useState<UploadFile[]>([]);
@@ -47,7 +47,7 @@ const Manage: React.FC = () => {
 
   const [isEdit, setIsEdit] = useState(false);
 
-  if (!access.canUse) {
+  if (!canUse) {
     history.push('/login');
   }
 
@@ -223,6 +223,10 @@ const Manage: React.FC = () => {
   useEffect(() => {
     queryUserList();
   }, []);
+
+  if (!canUse) {
+    return null;
+  }
 
   return (
     <PageContainer ghost>

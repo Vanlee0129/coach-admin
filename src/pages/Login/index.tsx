@@ -1,12 +1,13 @@
+import useAuth from '@/hooks/useAuth';
 import { login } from '@/services/auth';
 import { Button, Form, Input, message } from 'antd';
 import { useEffect } from 'react';
-import { history, useAccess } from 'umi';
+import { history } from 'umi';
 import './index.less';
 
 export default function Login() {
   const [messageApi, contextHolder] = message.useMessage();
-  const { canUse } = useAccess();
+  const canUse = useAuth();
 
   const onFinish = async (values: any) => {
     const res = await login({
@@ -18,11 +19,11 @@ export default function Login() {
         type: 'success',
         content: '登录成功',
       });
-      history.push('/');
       if (res.data?.session?.access_token) {
         sessionStorage.setItem('token', res.data?.session?.access_token);
-        sessionStorage.setItem('expires', `${res.data?.session?.expires_in}`);
+        sessionStorage.setItem('expires', `${res.data?.session?.expires_at}`);
       }
+      history.push('/');
       return;
     }
     messageApi.open({

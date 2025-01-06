@@ -1,14 +1,15 @@
+import useAuth from '@/hooks/useAuth';
 import { queryOnlineUser } from '@/services/user';
 import { PageContainer } from '@ant-design/pro-components';
 import { Card, Col, Row } from 'antd';
 import { useEffect, useState } from 'react';
-import { history, useAccess } from 'umi';
+import { history } from 'umi';
 
 const HomePage: React.FC = () => {
-  const access = useAccess();
+  const canUse = useAuth();
   const [onlineUser, setOnlineUser] = useState<any[]>([]);
 
-  if (!access.canUse) {
+  if (!canUse) {
     history.push('/login');
   }
 
@@ -19,6 +20,10 @@ const HomePage: React.FC = () => {
       }
     });
   }, []);
+
+  if (!canUse) {
+    return null;
+  }
 
   return (
     <PageContainer ghost>

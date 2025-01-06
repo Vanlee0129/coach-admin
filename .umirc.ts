@@ -13,19 +13,16 @@ export default defineConfig({
     {
       path: '/',
       redirect: '/home',
-      accss: 'authenticated',
     },
     {
       name: '首页',
       path: '/home',
       component: './Home',
-      accss: 'authenticated',
     },
     {
       name: '人员管理',
       path: '/manage',
       component: './Manage',
-      accss: 'authenticated',
     },
     {
       name: '登录',
