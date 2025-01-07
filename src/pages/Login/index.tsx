@@ -5,11 +5,16 @@ import { useEffect } from 'react';
 import { history } from 'umi';
 import './index.less';
 
+interface LoginParams {
+  username: string;
+  password: string;
+}
+
 export default function Login() {
   const [messageApi, contextHolder] = message.useMessage();
   const canUse = useAuth();
 
-  const onFinish = async (values: any) => {
+  const onFinish = async (values: LoginParams) => {
     const res = await login({
       username: values.username,
       password: values.password,
@@ -37,6 +42,12 @@ export default function Login() {
   };
 
   useEffect(() => {
+    const body = document.querySelector('body');
+    if (body) {
+      body.style.backgroundImage =
+        'url(https://haowallpaper.com/link/common/file/previewFileImg/15789130517090624)';
+      body.style.backgroundSize = 'cover';
+    }
     if (canUse) {
       history.push('/');
     }
@@ -50,9 +61,12 @@ export default function Login() {
         initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
+        layout="vertical"
       >
         <Form.Item>
-          <h2>共享助教后台登录</h2>
+          <div className="login-title">
+            <h2>共享助教后台登录</h2>
+          </div>
         </Form.Item>
 
         <Form.Item
@@ -72,7 +86,7 @@ export default function Login() {
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
             登录
           </Button>
         </Form.Item>
